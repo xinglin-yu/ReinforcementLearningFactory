@@ -10,4 +10,4 @@ This repo is for some reinforment learning practice with Open AI [Forzen Lake](h
 
 
 # Detail
-Refer to 知乎文章: [OpenAI Gym Frozen Lake 冰湖问题详解](https://zhuanlan.zhihu.com/p/554765525?)
+Refer to 知乎文章: [OpenAI Gym Frozen Lake 冰湖问题详解](https://zhuanlan.zhihu.com/p/554765525)
