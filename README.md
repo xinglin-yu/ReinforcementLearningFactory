@@ -1,5 +1,9 @@
 # FrozenLakeFarm
 
+![FrozenLake.png](https://s17.aconvert.com/convert/p3r68-cdx67/33vu3-cjmfd.gif)
+
+
+
 ![FrozenLake.png](Doc/FrozenLake.png)
 <center>Fig.1 Frozen Lake Env</center>
 
@@ -12,6 +16,14 @@ Frozen lake involves crossing a frozen lake from Start(S) to Goal(G) without fal
 
 
 ## Frozen Lake Env Analysis
+
+
+
+
+
+
+
+
 ![FrozenLake.png](Doc/PictureMerge.png)
 <center>Fig.2 Frozen Lake Env Analysis</center>
 
