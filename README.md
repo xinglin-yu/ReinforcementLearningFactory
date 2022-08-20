@@ -2,7 +2,7 @@
 
 This repo is for some reinforment learning practice with Open AI [Forzen Lake](https://www.gymlibrary.ml/environments/toy_text/frozen_lake/) environment. Like:
 
-![FrozenLake.png](https://s17.aconvert.com/convert/p3r68-cdx67/33vu3-cjmfd.gif)
+![FrozenLake.png](Doc/FrozenLake_Interaction_gif.gif)
 
 # Requirements
 - python - 3.8
