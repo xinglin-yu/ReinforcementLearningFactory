@@ -1,7 +1,7 @@
 import gym
 import numpy as np
-from Src.value_policy_base import ValuePolicyBase
-from Src.agent_client import AgentClient
+from value_policy_base import ValuePolicyBase
+from Src.PolicyHelper.policy_helper_client import PolicyHelperClient
 
 
 class ValueIterationClient(ValuePolicyBase):
@@ -52,15 +52,22 @@ class ValueIterationClient(ValuePolicyBase):
 
 if __name__ == '__main__':
 
-    env = gym.make('FrozenLake-v1', map_name="4x4", is_slippery=True)
+    # frozen lake order
+    order = 4
+    # preloaded maps
+    env = gym.make('FrozenLake-v1', map_name=f"{order}x{order}", is_slippery=True, max_episode_steps=1000)
+    # random maps
+    # env = gym.make('FrozenLake-v1', desc=generate_random_map(size=order), is_slippery=True, max_episode_steps=1000)
+
     env.reset()
-    env.render()
+    env.render(mode='rgb_array')
 
     value_client = ValueIterationClient(env)
     value_table = value_client.value_iteration()
     policy = value_client.extract_policy(value_table)
-    print(policy)
-    print(AgentClient(env).run_agent(policy, episode=10000, render=False))
+
+    # policy analysis and show
+    PolicyHelperClient.show(env, policy, file_suffix="_ValueIteration")
 
 
 # https://blog.csdn.net/njshaka/article/details/89237941
