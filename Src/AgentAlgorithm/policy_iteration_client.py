@@ -1,7 +1,8 @@
 import gym
+from gym.envs.toy_text.frozen_lake import generate_random_map
 import numpy as np
-from Src.value_policy_base import ValuePolicyBase
-from Src.agent_client import AgentClient
+from value_policy_base import ValuePolicyBase
+from Src.PolicyHelper.policy_helper_client import PolicyHelperClient
 
 
 class PolicyIterationClient(ValuePolicyBase):
@@ -56,7 +57,7 @@ class PolicyIterationClient(ValuePolicyBase):
             new_policy = self.extract_policy(new_value_function, gamma)
             # 判断迭代终止条件（策略不变时）
             if np.all(random_policy == new_policy):
-                print('Policy-Iteration converged as step %d.' % (i+1))
+                print('Policy-Iteration converged as step %d.' % (i + 1))
                 break
             # 新的策略为下一次的执行策略
             random_policy = new_policy
@@ -65,13 +66,18 @@ class PolicyIterationClient(ValuePolicyBase):
 
 
 if __name__ == '__main__':
+    # frozen lake order
+    order = 4
+    # preloaded maps
+    env = gym.make('FrozenLake-v1', map_name=f"{order}x{order}", is_slippery=True, max_episode_steps=1000)
+    # random maps
+    # env = gym.make('FrozenLake-v1', desc=generate_random_map(size=order), is_slippery=True, max_episode_steps=1000)
 
-    env = gym.make('FrozenLake-v1', map_name="4x4", is_slippery=True)
     env.reset()
-    env.render()
+    env.render(mode='rgb_array')
 
     policy_client = PolicyIterationClient(env)
     policy = policy_client.policy_iteration()
 
-    print(policy)
-    print(AgentClient(env).run_agent(policy, episode=10000, render=False))
+    # policy analysis and show
+    PolicyHelperClient.show(env, policy, file_suffix="_PolicyIteration")

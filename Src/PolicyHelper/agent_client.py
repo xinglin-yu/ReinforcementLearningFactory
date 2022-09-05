@@ -1,5 +1,3 @@
-import time
-
 import gym
 import numpy as np
 
@@ -16,41 +14,41 @@ class AgentClient:
         end_times = 0
         end = self.env.observation_space.n - 1
 
-        total_rewards = []
+        done_dict = dict()
 
         for i in range(episode):
-            # reset agent
-            done = False
             obs = self.env.reset()
             if render:
                 print(f"iter={i}")
                 self.env.render()
-
-            total_reward = 0
-
-            gamma = 1
+            # 步数
             step_idx = 0
 
-            while not done:
+            while True:
                 obs, reward, done, info = self.env.step(int(policy[obs]))
+                step_idx += 1
 
                 if render:
                     print("       step_idx=", step_idx)
                     self.env.render()
 
-                total_reward += (gamma ** step_idx * reward)
-                step_idx += 1
+                if done:
+                    if obs == end:
+                        # time.sleep(1)
+                        end_times += 1
 
-            if obs == end:
-                # time.sleep(1)
-                end_times += 1
+                    # record terminate point
+                    if obs not in done_dict:
+                        done_dict[obs] = 0
+                    done_dict[obs] += 1
 
-            total_rewards.append(total_reward)
-        self.env.close()
+                    break
 
-        return episode, end_times, end_times / episode
+            self.env.close()
 
-    def calcute_possibility(self, policy):
+        return episode, end_times, end_times / episode, done_dict
+
+    def calculate_possibility(self, policy):
 
         # 转移概率矩阵
         possibility_matrix = np.zeros(shape=(self.observation_spaces, self.observation_spaces))
@@ -79,23 +77,30 @@ class AgentClient:
             times += 1
             state_vector = state_vector_next
 
-        return times, possibility_matrix, state_vector
+        # format the output
+        state_vector_dict = {i: float(np.around(state_vector[i], 3)[0]) for i in range(len(state_vector))}
+        episode_terminate_points = {key: value for key, value in state_vector_dict.items() if value > 0}
+
+        return episode_terminate_points, times
 
 
 if __name__ == '__main__':
+    # increase the max_episode_steps from 100 to 1000, so that the agent will not end prematurely
+    # https://github.com/openai/gym/blob/master/gym/wrappers/time_limit.py
 
-    env = gym.make('FrozenLake-v1', map_name="4x4", is_slippery=True)
+    order = 4
+    env = gym.make('FrozenLake-v1', map_name=f"{order}x{order}", is_slippery=True, max_episode_steps=1000)
     env.reset()
-    env.render()
+    frame = env.render(mode='rgb_array')
 
     # given policy
     policy = [0, 3, 3, 3, 0, 0, 0, 0, 3, 1, 0, 0, 0, 2, 1, 0]
     print(policy)
 
-    obj = AgentClient(env)
-    times, possibility_matrix, state_vector = obj.calcute_possibility(policy)
-    print("times=", times)
-    print("state_vector=", state_vector)
+    # calculate arriving possibility
+    agent_client = AgentClient(env)
+    print(agent_client.calculate_possibility(policy))
 
-    print(obj.run_agent(policy, episode=10000, render=False))
-    # print(obj.run_agent(policy, episode=10, render=True))
+    # iteration verification
+    print(agent_client.run_agent(policy, episode=10000, render=False))
+
