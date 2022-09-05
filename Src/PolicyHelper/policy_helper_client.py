@@ -2,15 +2,15 @@ import gym
 import numpy as np
 from typing import List
 
-from agent_client import AgentClient
-from image_client import ImageClient
-from maze_path_client import MazePathClient
+from Src.PolicyHelper.agent_client import AgentClient
+from Src.PolicyHelper.image_client import ImageClient
+from Src.PolicyHelper.maze_path_client import MazePathClient
 
 
 class PolicyHelperClient:
 
     @staticmethod
-    def show(env, policy: List[int], file_suffix="", snapshot_folder = "../../Doc/Snapshot/"):
+    def show(env, policy: List[int], file_suffix="", snapshot_folder = "./Src/Doc/Snapshot/"):
         """
         This method is for post show of an policy
         :param env: the frozen lake env
