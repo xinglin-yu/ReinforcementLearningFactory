@@ -2,9 +2,9 @@ import gym
 import numpy as np
 from typing import List
 
-from agent_client import AgentClient
-from image_client import ImageClient
-from maze_path_client import MazePathClient
+from Src.PolicyHelper.agent_client import AgentClient
+from Src.PolicyHelper.image_client import ImageClient
+from Src.PolicyHelper.maze_path_client import MazePathClient
 
 
 class PolicyHelperClient:
@@ -41,7 +41,7 @@ class PolicyHelperClient:
         ImageClient.save_frame(frame, filename=f"{snapshot_folder}FrozenLake{order}x{order}{file_suffix}.png")
         ImageClient.add_arrow(policy, order=order,
                               in_img=f"{snapshot_folder}FrozenLake{order}x{order}{file_suffix}.png",
-                              out_img=f".{snapshot_folder}FrozenLake{order}x{order}{file_suffix}_Policy.png")
+                              out_img=f"{snapshot_folder}FrozenLake{order}x{order}{file_suffix}_Policy.png")
         ImageClient.add_path(maze_path_client.paths, order=order,
                              episode_terminate_points=episode_terminate_points,
                              in_img=f"{snapshot_folder}FrozenLake{order}x{order}{file_suffix}.png",
