@@ -10,8 +10,8 @@ class PolicyIterationClient(ValuePolicyBase):
     def __init__(self, env):
         super().__init__(env)
 
-    # 计算值函数
-    def compute_value_function(self, policy, gamma=1.0):
+    # 计算值函数: 策略评估
+    def policy_evaluation(self, policy, gamma=1.0):
         # 初始化V表
         value_table = np.zeros(self.observation_spaces)
         # 收敛判断阈值
@@ -42,8 +42,8 @@ class PolicyIterationClient(ValuePolicyBase):
         # 返回V表
         return value_table
 
-    # 策略迭代
-    def policy_iteration(self, gamma=1.0):
+    # 策略改进
+    def policy_improvement(self, gamma=1.0):
         # 初始化随机策略，下句代码即为初始策略全为0（向左走）
         random_policy = np.zeros(self.observation_spaces)
         new_policy = random_policy
@@ -52,7 +52,7 @@ class PolicyIterationClient(ValuePolicyBase):
         # 开始迭代
         for i in range(no_of_iterations):
             # 计算新的值函数
-            new_value_function = self.compute_value_function(random_policy, gamma)
+            new_value_function = self.policy_evaluation(random_policy, gamma)
             # 得到新的策略
             new_policy = self.extract_policy(new_value_function, gamma)
             # 判断迭代终止条件（策略不变时）
@@ -77,7 +77,7 @@ if __name__ == '__main__':
     env.render(mode='rgb_array')
 
     policy_client = PolicyIterationClient(env)
-    policy = policy_client.policy_iteration()
+    policy = policy_client.policy_improvement()
 
     # policy analysis and show
     PolicyHelperClient.show(env, policy, file_suffix="_PolicyIteration")
