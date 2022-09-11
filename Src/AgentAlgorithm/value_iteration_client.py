@@ -56,8 +56,12 @@ if __name__ == '__main__':
     order = 4
     # preloaded maps
     env = gym.make('FrozenLake-v1', map_name=f"{order}x{order}", is_slippery=True, max_episode_steps=1000)
+    file_suffix = "_ValueIteration"
+
     # random maps
+    np.random.seed(0)  # random seed can enable same env in every run
     # env = gym.make('FrozenLake-v1', desc=generate_random_map(size=order), is_slippery=True, max_episode_steps=1000)
+    # file_suffix = "_Random_ValueIteration"
 
     env.reset()
     env.render(mode='rgb_array')
@@ -67,7 +71,7 @@ if __name__ == '__main__':
     policy = value_client.extract_policy(value_table)
 
     # policy analysis and show
-    PolicyHelperClient.show(env, policy, file_suffix="_ValueIteration")
+    PolicyHelperClient.show(env, policy, file_suffix=file_suffix)
 
 
 # https://blog.csdn.net/njshaka/article/details/89237941

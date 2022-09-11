@@ -10,7 +10,7 @@ from Src.PolicyHelper.maze_path_client import MazePathClient
 class PolicyHelperClient:
 
     @staticmethod
-    def show(env, policy: List[int], file_suffix="", snapshot_folder = "./Src/Doc/Snapshot/"):
+    def show(env, policy: List[int], file_suffix="", snapshot_folder = "../../Doc/Snapshot/"):
         """
         This method is for post show of an policy
         :param env: the frozen lake env
