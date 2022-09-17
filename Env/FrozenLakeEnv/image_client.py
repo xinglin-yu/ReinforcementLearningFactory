@@ -158,5 +158,5 @@ if __name__ == '__main__':
     policy = [0, 3, 3, 3, 0, 0, 0, 0, 3, 1, 0, 0, 0, 2, 1, 0]
     episode_terminate_points = {15: 1.0}
     ImageClient.add_arrow(policy, order=4,
-                          in_img='../Doc/Snapshot/FrozenLake4x4.png',
-                          out_img='../Doc/Snapshot/FrozenLake4x4_Policy.png')
+                          in_img='../Doc/Env.FrozenLakeEnv/Snapshot/FrozenLake4x4.png',
+                          out_img='../Doc/Env.FrozenLakeEnv/Snapshot/FrozenLake4x4_Policy.png')
