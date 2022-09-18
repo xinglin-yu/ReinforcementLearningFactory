@@ -7,14 +7,18 @@ import matplotlib.pyplot as plt
 class SnakeEnv(gym.Env):
 
     SIZE = 100  # 蛇棋状态空间大小
-    DICES = [3, 6]  # 蛇棋动作空间 骰子最大取值
 
-    def __init__(self, random_ladder_num=-1):
+    def __init__(self, random_ladder_num=-1, dices=None):
         """
         :param random_ladder_num: 随机产生的梯子数目. -1: 使用预置的梯子. >=0: 随机产生梯子
+        :param dices: 蛇棋动作空间 骰子最大取值
         """
+        if dices is None:
+            dices = [3, 6]
+        self.dices = dices
+
         self.observation_space = Discrete(self.SIZE)
-        self.action_space = Discrete(len(self.DICES))
+        self.action_space = Discrete(len(self.dices))
 
         # 生成梯子, eg. {78:33, 52:97, 71:64, 51:32}
         if random_ladder_num >= 0:
@@ -42,7 +46,7 @@ class SnakeEnv(gym.Env):
     def step(self, action: int):
         # 取消random的影响, 使得每次能够随机选择
         np.random.seed()
-        step = np.random.randint(self.DICES[action]) + 1
+        step = np.random.randint(self.dices[action]) + 1
         self.pos = self.__step_forward(self.pos, step)
         return self.pos, self.reward(self.pos), self.done(self.pos), {}
 
@@ -63,7 +67,7 @@ class SnakeEnv(gym.Env):
         self.__render_ui()
         plt.show()
 
-    def render_policy(self, policy):
+    def render_policy(self, policy, filename=None):
         """
         绘图蛇棋网格界面+策略
         :return:
@@ -80,6 +84,8 @@ class SnakeEnv(gym.Env):
             x, y = state % order + offset, state // order + offset
             plt.text(x + offset, y + offset, action_dict[action], color=color_dict[action])
 
+        if filename:
+            plt.savefig(filename)
         plt.show()
 
     # 以下为私有函数区
@@ -142,7 +148,7 @@ class SnakeEnv(gym.Env):
 
         for state in range(self.SIZE):
             action_dict = dict()
-            for action, dice in enumerate(self.DICES):
+            for action, dice in enumerate(self.dices):
                 # 概率
                 prob = 1.0 / dice
                 # 骰子取值为[1, 2, 3,...]
