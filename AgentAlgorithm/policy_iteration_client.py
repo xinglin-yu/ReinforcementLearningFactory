@@ -13,7 +13,7 @@ class PolicyIterationClient(ValuePolicyBase):
         策略评估: 固定策略 => 求最优状态值函数
         :param policy: 策略
         :param max_iter: 最大迭代步数
-        :return:
+        :return: value_table
         """
         # 初始化V表
         value_table = np.zeros(self.observation_spaces, dtype=float)
@@ -23,24 +23,20 @@ class PolicyIterationClient(ValuePolicyBase):
         iters = 0
         while True:  # 循环直到收敛
             iters += 1
+
             # 初始化更新后的V表（旧表复制过来）
             updated_value_table = np.copy(value_table)
+
             # 计算每个状态从策略中得到的动作，然后计算值函数
             # 遍历每个状态
             for state in range(self.observation_spaces):
                 # 根据策略取动作
                 action = policy[state]
 
-                # 更新该状态的V值（公式）
-                value_table[state] = 0  # 每次都要重新赋值
-                for next_sr in self.env.P[state][action]:
-                    # next_state是否是终止状态？if Yes：done=True；else：done=False
-                    trans_prob, next_state, reward, done = next_sr
-                    value_table[state] += trans_prob * (reward + self.gamma * updated_value_table[next_state])
+                # 计算q值, 并更新v表
+                value_table[state] = self.q_value_calculate(state, action, updated_value_table,
+                                                            default_q_value=updated_value_table[state])
 
-                # # 更新该状态的V值（公式）
-                # value_table[state] = sum([trans_prob*(reward+gamma*updated_value_table[next_state])
-                #                           for trans_prob, next_state, reward, done in env.P[state][action]])
             # 收敛判断
             if np.sum((np.fabs(updated_value_table - value_table))) <= threshold:
                 print('policy_evaluation converges at {} rounds'.format(iters))

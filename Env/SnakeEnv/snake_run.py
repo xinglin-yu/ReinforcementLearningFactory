@@ -57,25 +57,29 @@ class SnakeRun(object):
         env = SnakeEnv()
 
         # base policy
-        SnakeRun.base_policy_run(env)
+        # SnakeRun.base_policy_run(env)
 
         # optimal policy
         pi_algo = PolicyIterationClient(env, gamma=0.8)
-        policy = pi_algo.policy_iteration()
-        # policy = pi_algo.policy_iteration_timer(max_iter=-1)
+        # policy = pi_algo.policy_iteration()
+        policy = pi_algo.policy_iteration_timer(max_iter=1)
         print('policy_opt={}'.format(policy))
         print('policy_opt: (max_episodes, avg_rewards)={}'.format(SnakeClient.run_episodes(env, policy)))
-        env.render_policy(policy, filename="../../Doc/Env.SnakeEnv/SnakeEnv_ladders8_PolicyIteration_Policy.png")
+        env.render_policy(policy, filename="../../Doc/Env.SnakeEnv/SnakeEnv_ladders8_PolicyIteration_Policy1.png")
 
     @staticmethod
     @time_wrapper
     def value_iteration_run():
-        env = SnakeEnv()
+        env = SnakeEnv(random_ladder_num=-1)
+
+        # base policy
+        # SnakeRun.base_policy_run(env)
+
         vi_algo = ValueIterationClient(env, gamma=0.8)
         policy = vi_algo.value_iteration()
         print('policy_opt={}'.format(policy))
         print('policy_opt: (max_episodes, avg_rewards)={}'.format(SnakeClient.run_episodes(env, policy)))
-        env.render_policy(policy)
+        env.render_policy(policy, filename="../../Doc/Env.SnakeEnv/SnakeEnv_ladders8_ValueIteration_Policy.png")
 
     @staticmethod
     @time_wrapper
@@ -85,14 +89,27 @@ class SnakeRun(object):
         policy = algo.general_iteration()
         print('policy_opt={}'.format(policy))
         print('policy_opt: (max_episodes, avg_rewards)={}'.format(SnakeClient.run_episodes(env, policy)))
-        env.render_policy(policy)
+        env.render_policy(policy, render=False)
+
+    @staticmethod
+    @time_wrapper
+    def calculate_possibility():
+        env = SnakeEnv(random_ladder_num=0)
+
+        policy_1 = [1] * 100  # 全部投掷1-6的策略
+
+        from Env.FrozenLakeEnv.frozen_lake_client import FrozenLakeClient
+
+        res = FrozenLakeClient.calculate_possibility(env, policy_1)
+        print(res)
 
 
 if __name__ == '__main__':
     # SnakeRun.base_policy_run()
     # SnakeRun.policy_iteration_run1()
-    SnakeRun.policy_iteration_run2()
-    # SnakeRun.value_iteration_run()
+    # SnakeRun.policy_iteration_run2()
+    SnakeRun.value_iteration_run()
     # SnakeRun.general_iteration_run()
+    # SnakeRun.calculate_possibility()
 
 # TODO: 对于给定的环境, 最优的step是什么呢?

@@ -67,7 +67,7 @@ class SnakeEnv(gym.Env):
         self.__render_ui()
         plt.show()
 
-    def render_policy(self, policy, filename=None):
+    def render_policy(self, policy, filename=None, render=False):
         """
         绘图蛇棋网格界面+策略
         :return:
@@ -86,7 +86,8 @@ class SnakeEnv(gym.Env):
 
         if filename:
             plt.savefig(filename)
-        plt.show()
+        if render:
+            plt.show()
 
     # 以下为私有函数区
     def __render_ui(self):
@@ -139,8 +140,7 @@ class SnakeEnv(gym.Env):
     def __transform_possibility_matrix(self):
         """
         定义环境的转移概率矩阵
-        next_iter = p(s,a,s1)
-        next_iter = p, next_state, reward, done
+        next_state_vector = (p, next_state, reward, done) <= p(s,a,s1)
         :return: P
         """
         # 概率转移矩阵
@@ -154,12 +154,12 @@ class SnakeEnv(gym.Env):
                 # 骰子取值为[1, 2, 3,...]
                 steps = np.arange(dice) + 1
 
-                next_state_vector = list()
+                next_state_vectors = list()
                 for step in steps:
                     next_state = self.__step_forward(state, step)
-                    next_state_vector.append((prob, next_state, self.reward(next_state), self.done(next_state)))
+                    next_state_vectors.append((prob, next_state, self.reward(next_state), self.done(next_state)))
 
-                action_dict[action] = next_state_vector
+                action_dict[action] = next_state_vectors
             P[state] = action_dict
 
         return P
