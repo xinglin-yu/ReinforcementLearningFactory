@@ -86,7 +86,7 @@ class SnakeRun(object):
     def general_iteration_run():
         env = SnakeEnv()
         algo = GeneralIterationClient(env, gamma=0.8)
-        policy = algo.general_iteration()
+        policy = algo.general_iteration(value_max_iter=50)
         print('policy_opt={}'.format(policy))
         print('policy_opt: (max_episodes, avg_rewards)={}'.format(SnakeClient.run_episodes(env, policy)))
         env.render_policy(policy, render=False)

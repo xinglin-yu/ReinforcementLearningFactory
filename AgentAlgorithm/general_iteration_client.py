@@ -8,12 +8,13 @@ class GeneralIterationClient:
         self.pi_algo = PolicyIterationClient(env, gamma)
         self.vi_algo = ValueIterationClient(env, gamma)
 
-    def general_iteration(self):
+    def general_iteration(self, value_max_iter=50):
         """
         泛化迭代
+        :param value_max_iter: 值迭代的最大轮数
         :return:
         """
-        policy = self.vi_algo.value_iteration(max_iter=100)
+        policy = self.vi_algo.value_iteration(value_max_iter)
         new_policy = self.pi_algo.policy_iteration(initial_policy=policy, max_iter=100)
 
         return new_policy
