@@ -18,10 +18,14 @@ class FrozenLakeClient:
         # https://github.com/openai/gym/blob/master/gym/wrappers/time_limit.py
 
         # preloaded maps
-        env = gym.make('FrozenLake-v1', map_name=f"{order}x{order}", is_slippery=True, max_episode_steps=1000)
+        env = gym.make('FrozenLake-v1',
+                       map_name=f"{order}x{order}",
+                       is_slippery=True,
+                       max_episode_steps=1000,
+                       render_mode='rgb_array')
 
         env.reset()
-        env.render(mode='rgb_array')
+        env.render()
 
         return env
 
@@ -33,10 +37,14 @@ class FrozenLakeClient:
         """
         # random maps
         np.random.seed(0)  # random seed can enable same env in every run
-        env = gym.make('FrozenLake-v1', desc=generate_random_map(size=order), is_slippery=True, max_episode_steps=1000)
+        env = gym.make('FrozenLake-v1',
+                       desc=generate_random_map(size=order),
+                       is_slippery=True,
+                       max_episode_steps=1000,
+                       render_mode='rgb_array')
 
         env.reset()
-        env.render(mode='rgb_array')
+        env.render()
 
         return env
 
@@ -49,7 +57,7 @@ class FrozenLakeClient:
         done_dict = dict()
 
         for i in range(episodes):
-            obs = env.reset()
+            observation = env.reset()[0]
             if render:
                 print(f"iter={i}")
                 env.render()
@@ -57,21 +65,22 @@ class FrozenLakeClient:
             step_idx = 0
 
             while True:
-                obs, reward, done, info = env.step(int(policy[obs]))
+                action = int(policy[observation])
+                observation, reward, terminated, truncated, info = env.step(action)
                 step_idx += 1
 
                 if render:
                     print("       step_idx=", step_idx)
                     env.render()
 
-                if done:
-                    if obs == end:
+                if terminated:
+                    if observation == end:
                         # time.sleep(1)
                         end_times += 1
                     # record terminate point
-                    if obs not in done_dict:
-                        done_dict[obs] = 0
-                    done_dict[obs] += 1
+                    if observation not in done_dict:
+                        done_dict[observation] = 0
+                    done_dict[observation] += 1
                     break
             env.close()
 
@@ -145,12 +154,10 @@ class FrozenLakeClient:
         maze_path_client = MazePathClient(env)
         maze_path_client.get_paths_to_hole_goal(state=0, policy=policy)
         print(len(maze_path_client.paths))
-        # for path in agent_client.maze_path_client.paths:
-        #     print(path)
 
         # 绘制路径
         print("(4) Render figure")
-        frame = env.render(mode='rgb_array')
+        frame = env.render()
         order = int(np.sqrt(env.observation_space.n))
         ImageClient.save_frame(frame, filename=f"{snapshot_folder}FrozenLake{order}x{order}{file_suffix}.png")
         ImageClient.add_arrow(policy, order=order,
@@ -167,4 +174,3 @@ class FrozenLakeClient:
 if __name__ == '__main__':
 
     env = FrozenLakeClient.create_preload_env_obj()
-
