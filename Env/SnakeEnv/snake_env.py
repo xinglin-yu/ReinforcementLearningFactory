@@ -96,6 +96,10 @@ class SnakeEnv(gym.Env):
         :return:
         """
         order = int(np.sqrt(self.SIZE))
+
+        # 先清空, 防止重叠
+        plt.cla()
+
         # 画网格线但不显示刻度值
         plt.xlim([0, order])
         plt.ylim([0, order])
