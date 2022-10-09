@@ -1,5 +1,5 @@
-from AgentAlgorithm.policy_iteration_client import PolicyIterationClient
-from AgentAlgorithm.value_iteration_client import ValueIterationClient
+from AgentAlgorithm.PolicyValueIteration.policy_iteration_client import PolicyIterationClient
+from AgentAlgorithm.PolicyValueIteration.value_iteration_client import ValueIterationClient
 
 
 class GeneralIterationClient:

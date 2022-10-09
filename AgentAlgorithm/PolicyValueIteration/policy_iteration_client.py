@@ -1,6 +1,6 @@
 import numpy as np
 from CommonUtils.decorator import timer
-from AgentAlgorithm.value_policy_base import ValuePolicyBase
+from AgentAlgorithm.PolicyValueIteration.value_policy_base import ValuePolicyBase
 
 
 class PolicyIterationClient(ValuePolicyBase):

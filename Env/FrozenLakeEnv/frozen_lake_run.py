@@ -1,8 +1,8 @@
 from CommonUtils.decorator import time_wrapper
 from Env.FrozenLakeEnv.frozen_lake_client import FrozenLakeClient
-from AgentAlgorithm.policy_iteration_client import PolicyIterationClient
-from AgentAlgorithm.value_iteration_client import ValueIterationClient
-from AgentAlgorithm.general_iteration_client import GeneralIterationClient
+from AgentAlgorithm.PolicyValueIteration.policy_iteration_client import PolicyIterationClient
+from AgentAlgorithm.PolicyValueIteration.value_iteration_client import ValueIterationClient
+from AgentAlgorithm.PolicyValueIteration.general_iteration_client import GeneralIterationClient
 
 
 class FrozenLakeRun:
