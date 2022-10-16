@@ -35,7 +35,8 @@ class SnakeRun(object):
             mc.iteration(agent, env)
         print('return_pi={}'.format(SnakeClient.run_episodes(env, agent.pi)))
         print(agent.pi)
-        env.render_policy(agent.pi, render=False)
+        env.render_policy(agent.pi, render=False,
+                          filename="../../Doc/Env.SnakeEnv/SnakeEnv_ladders8_Sarsa_Policy.png")
 
     @staticmethod
     @time_wrapper
@@ -47,11 +48,12 @@ class SnakeRun(object):
             mc.iteration(agent, env)
         print('return_pi={}'.format(SnakeClient.run_episodes(env, agent.pi)))
         print(agent.pi)
-        env.render_policy(agent.pi, render=True)
+        env.render_policy(agent.pi, render=False,
+                          filename="../../Doc/Env.SnakeEnv/SnakeEnv_ladders8_QLearning_Policy.png")
 
 
 if __name__ == '__main__':
 
     SnakeRun.monte_carlo_demo()
-    # SnakeRun.sarsa_demo()
-    # SnakeRun.qlearning_demo()
+    SnakeRun.sarsa_demo()
+    SnakeRun.qlearning_demo()
